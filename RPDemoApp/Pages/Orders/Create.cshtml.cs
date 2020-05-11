@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLibrary.Data;
+using DataLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,15 +17,25 @@ namespace RPDemoApp.Pages.Orders
 
       public List<SelectListItem> FoodItems { get; set; }
 
+      [BindProperty]
+      public OrderModel Order { get; set; }
+
       public CreateModel(IFoodData foodData, IOrderData orderData)
       {
          _foodData = foodData;
          _orderData = orderData;
       }
 
-      public void OnGet()
+      public async Task OnGet()
       {
+         var food = await _foodData.GetFood();
 
+         FoodItems = new List<SelectListItem>();
+
+         food.ForEach(x =>
+         {
+            FoodItems.Add(new SelectListItem { Value = x.Id.ToString(), Text = x.Title });
+         });
       }
 
 
