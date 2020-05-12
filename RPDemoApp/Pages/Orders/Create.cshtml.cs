@@ -38,6 +38,23 @@ namespace RPDemoApp.Pages.Orders
          });
       }
 
+      public async Task<IActionResult> OnPost()
+      {
+         if (!ModelState.IsValid)
+         {
+            return Page();
+         }
+
+         var food = await _foodData.GetFood();
+
+         Order.Total = Order.Quantity * food.Where(x => x.Id == Order.FoodID).First().Price;
+
+         int id = await _orderData.CreateOrder(Order);
+
+         return RedirectToPage("./Create");
+
+      }
+
 
    }
 }
