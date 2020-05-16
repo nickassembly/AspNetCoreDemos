@@ -50,6 +50,44 @@ namespace MVCDemoApp.Controllers
 
          int id = await _orderData.CreateOrder(order);
 
+         return RedirectToAction("Display", new { id });
+      }
+
+      public async Task<IActionResult> Display(int id)
+      {
+         OrderDisplayModel displayOrder = new OrderDisplayModel();
+         displayOrder.Order = await _orderData.GetOrderById(id);
+
+         if (displayOrder.Order != null)
+         {
+            var food = await _foodData.GetFood();
+
+            displayOrder.ItemPurchased = food.Where(x => x.Id == displayOrder.Order.FoodID).FirstOrDefault()?.Title;
+
+         }
+            return View(displayOrder);
+      }
+
+      [HttpPost]
+      public async Task<IActionResult> Update(int id, string orderName)
+      {
+         await _orderData.UpdateOrderName(id, orderName);
+
+         return RedirectToAction("Display", new { id });
+      }
+
+      public async Task<IActionResult> Delete(int id)
+      {
+         var order = await _orderData.GetOrderById(id);
+
+         return View(order);
+      }
+
+      [HttpPost]
+      public async Task<IActionResult> Delete(OrderModel order)
+      {
+         await _orderData.DeleteOrder(order.Id);
+
          return RedirectToAction("Create");
       }
 

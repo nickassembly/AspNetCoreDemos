@@ -1,5 +1,4 @@
-﻿@page
-@model RPDemoApp.Pages.Orders.DisplayModel
+﻿@model MVCDemoApp.Models.OrderDisplayModel
 @{
     ViewData["Title"] = "Display";
 }
@@ -38,27 +37,25 @@ else
                 <td><strong>Quantity Ordered</strong></td>
                 <td>@Model.Order.Quantity</td>
             </tr>
-
             <tr>
                 <td colspan="2">
-                    <a asp-page="./Delete" asp-route-id="@Model.Order.Id" class="btn btn-danger">Delete Order</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Order.Id" class="btn btn-danger">Delete Order</a>
                 </td>
             </tr>
 
         </tbody>
     </table>
 
-    <form method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input asp-for="UpdateModel.Id" value="@Model.Order.Id" type="hidden" />
+    <form asp-action="Update">
+        <input name="id" value="@Model.Order.Id" type="hidden" />
         <div class="form-group">
-            <label asp-for="UpdateModel.OrderName" class="control-label"></label>
-            <input asp-for="UpdateModel.OrderName" value="@Model.Order.OrderName" class="form-control" />
-            <span asp-validation-for="UpdateModel.OrderName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Update Order Name" class="btn btn-primary" />
-            </div>
+            <label class="control-label">Order Name</label>
+            <input name="orderName" value="@Model.Order.OrderName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Update Order Name" class="btn btn-primary" />
+        </div>
     </form>
+
 }
 
